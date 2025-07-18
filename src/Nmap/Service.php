@@ -19,7 +19,7 @@ class Service
 
     private ?string $version;
 
-    public function __construct(string $name = null, string $product = null, string $version = null)
+    public function __construct(?string $name = null, ?string $product = null, ?string $version = null)
     {
         $this->name = $name;
         $this->product = $product;
