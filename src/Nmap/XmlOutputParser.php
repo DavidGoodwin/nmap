@@ -182,13 +182,17 @@ class XmlOutputParser
 
         $hosts = [];
         foreach ($xml->host as $xmlHost) {
-            $state = $xmlHost->status->attributes()->state ?? null;
+            if (!$xmlHost instanceof SimpleXMLElement) {
+                continue; // shouldn't be possible?
+            }
+
+            $state = $xmlHost->status?->attributes()?->state ?? null;
             if ($state === null) {
                 // ? log ? throw?
                 continue;
             }
 
-            $hostnameElement = $xmlHost->hostnames->hostname;
+            $hostnameElement = $xmlHost->hostnames?->hostname ?? null;
 
             if (!$hostnameElement instanceof SimpleXMLElement) {
                 continue; // ? log ? throw?
@@ -196,11 +200,21 @@ class XmlOutputParser
 
             $ports = $xmlHost->ports;
 
+            if (!$ports instanceof SimpleXMLElement) {
+                continue; // ? log ? throw?
+            }
+
+            if (isset($ports->port)) {
+                $port = self::parsePorts($ports->port);
+            } else {
+                $port = [];
+            }
+
             $host = new Host(
                 self::parseAddresses($xmlHost),
                 (string)$state,
-                isset($xmlHost->hostnames) ? self::parseHostnames($xmlHost->hostnames->hostname) : [],
-                $ports ? self::parsePorts($ports->port) : []
+                (isset($xmlHost->hostnames) && isset($xmlHost->hostnames->hostname)) ? self::parseHostnames($xmlHost->hostnames->hostname) : [],
+                $port
             );
 
             $script = $xmlHost->hostscript->script ?? null;
