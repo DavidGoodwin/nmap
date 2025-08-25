@@ -172,7 +172,7 @@ class XmlOutputParser
             throw new \InvalidArgumentException("{$this->xmlFile} does not appear to be valid.");
         }
 
-        if ($xml->runstats->hosts->up === '0') {
+        if ((string) $xml->runstats->hosts->attributes()->up === '0') {
             return [];
         }
 
