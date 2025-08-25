@@ -168,7 +168,15 @@ class XmlOutputParser
     {
         $xml = simplexml_load_file($this->xmlFile);
 
-        if (!$xml instanceof SimpleXMLElement || !isset($xml->host)) {
+        if (!$xml instanceof SimpleXMLElement || !isset($xml->runstats->hosts)) {
+            throw new \InvalidArgumentException("{$this->xmlFile} does not appear to be valid.");
+        }
+
+        if ((string) $xml->runstats->hosts->attributes()->up === '0') {
+            return [];
+        }
+
+        if (!isset($xml->host)) {
             throw new \InvalidArgumentException("{$this->xmlFile} does not appear to be valid.");
         }
 
