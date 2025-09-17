@@ -109,6 +109,8 @@ class Nmap
         $options[] = '-oX';
         $options[] = $this->outputFile;
 
+        $options[] = '--'; // so targets are not options
+        
         return array_merge([$this->executable], $options, $targets);
     }
 
