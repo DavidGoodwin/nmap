@@ -142,7 +142,7 @@ class XmlOutputParser
         if (!is_string($str)) {
             throw new \InvalidArgumentException("Could not get contents of file: {$this->xmlFile}");
         }
-        
+
 
         if (preg_match('%' . preg_quote(XmlOutputParser::$xmlCloseTag) . '\s+$%m', $str)) {
             return false;
@@ -213,7 +213,8 @@ class XmlOutputParser
             $host = new Host(
                 self::parseAddresses($xmlHost),
                 (string)$state,
-                (isset($xmlHost->hostnames) && isset($xmlHost->hostnames->hostname)) ? self::parseHostnames($xmlHost->hostnames->hostname) : [],
+                (isset($xmlHost->hostnames) && isset($xmlHost->hostnames->hostname)) ?
+                    self::parseHostnames($xmlHost->hostnames->hostname) : [],
                 $port
             );
 

@@ -55,7 +55,9 @@ class Nmap
         $this->executor = $executor ?: new ProcessExecutor();
         $tmp = $outputFile ?? tempnam(sys_get_temp_dir(), 'nmap-scan-output.xml');
         if (!is_string($tmp)) {
-            throw new \InvalidArgumentException("No outputFile parameter given, or not able to create one with tempnam, fs problem?");
+            throw new \InvalidArgumentException(
+                "No outputFile parameter given, or not able to create one with tempnam, fs problem?"
+            );
         }
         $this->outputFile = $tmp;
         $this->executable = $executable;
@@ -110,7 +112,7 @@ class Nmap
         $options[] = $this->outputFile;
 
         $options[] = '--'; // so targets are not options
-        
+
         return array_merge([$this->executable], $options, $targets);
     }
 
