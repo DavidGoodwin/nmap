@@ -194,7 +194,7 @@ class XmlOutputParser
 
             $hostnameElement = $xmlHost->hostnames?->hostname ?? null;
 
-            if (!$hostnameElement instanceof SimpleXMLElement) {
+            if (!$hostnameElement instanceof SimpleXMLElement && $hostnameElement !== null) {
                 continue; // ? log ? throw?
             }
 
