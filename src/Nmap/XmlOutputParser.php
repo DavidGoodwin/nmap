@@ -172,7 +172,7 @@ class XmlOutputParser
             throw new \InvalidArgumentException("{$this->xmlFile} does not appear to be valid.");
         }
 
-        if ((string) $xml->runstats->hosts->attributes()->up === '0') {
+        if ((string)$xml->runstats->hosts->attributes()->up === '0') {
             return [];
         }
 
@@ -192,12 +192,6 @@ class XmlOutputParser
                 continue;
             }
 
-            $hostnameElement = $xmlHost->hostnames?->hostname ?? null;
-
-            if (!$hostnameElement instanceof SimpleXMLElement && $hostnameElement !== null) {
-                continue; // ? log ? throw?
-            }
-
             $ports = $xmlHost->ports;
 
             if (!$ports instanceof SimpleXMLElement) {
@@ -210,6 +204,7 @@ class XmlOutputParser
                 $port = [];
             }
 
+            // <hostnames></hostnames> is possible.
             $host = new Host(
                 self::parseAddresses($xmlHost),
                 (string)$state,
