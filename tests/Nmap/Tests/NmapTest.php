@@ -127,7 +127,7 @@ class NmapTest extends TestCase
     public function testScanWithServiceInfo()
     {
         $outputFile = __DIR__ . '/Fixtures/test_scan_with_service_info.xml';
-        $expectedCommand = ["nmap", "-sV", "-oX", $outputFile, '--',  'williamdurand.fr'];
+        $expectedCommand = ["nmap", "-sV", "-oX", $outputFile, '--', 'williamdurand.fr'];
 
         $executor = $this->getProcessExecutorMock($expectedCommand);
 
@@ -319,6 +319,16 @@ class NmapTest extends TestCase
         $parser = new XmlOutputParser(__DIR__ . '/Fixtures/Validation/test_completed_valid.xml');
         $this->assertFalse($parser->attemptFixInvalidFile());
     }
+
+    public function testReverseDnsDidNotPopulateHostnames()
+    {
+        $parser = new XmlOutputParser(__DIR__ . '/Fixtures/test_scan_empty_hostnames.xml');
+        $hosts = $parser->parse();
+
+        $this->assertNotEmpty($hosts);
+        $this->assertEquals('127.0.0.2', $hosts[0]->getAddresses()["127.0.0.2"]->getAddress());
+    }
+
 
     public function testBuildCommand()
     {
